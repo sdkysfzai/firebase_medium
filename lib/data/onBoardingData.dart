@@ -1,14 +1,53 @@
+import 'dart:async';
+
 import 'package:firebase_todoapp/views/OnBoardingPages/firstpage.dart';
 import 'package:firebase_todoapp/views/OnBoardingPages/secondpage.dart';
 import 'package:flutter/material.dart';
 
-class OnBoardingWidget extends StatelessWidget {
+class OnBoardingWidget extends StatefulWidget {
   const OnBoardingWidget({
     Key? key,
-    required this.pageController,
   }) : super(key: key);
 
-  final PageController pageController;
+  @override
+  _OnBoardingWidgetState createState() => _OnBoardingWidgetState();
+}
+
+class _OnBoardingWidgetState extends State<OnBoardingWidget> {
+  Timer? _timer;
+  int currentPage = 0;
+  PageController pageController = PageController(
+    initialPage: 0,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
+        return setState(() {
+          if (currentPage < 1) {
+            currentPage++;
+          } else {
+            currentPage = 0;
+          }
+          pageController.animateToPage(
+            currentPage,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeIn,
+          );
+        });
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    print("Dispose timer called");
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

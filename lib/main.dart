@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_todoapp/data/onBoardingData.dart';
+import 'package:firebase_todoapp/views/CRUDPages/homepage.dart';
 import 'package:firebase_todoapp/views/login_page.dart';
 import 'package:firebase_todoapp/views/register_page.dart';
 import 'package:flutter/material.dart';
@@ -19,38 +19,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int currentPage = 0;
-  PageController pageController = PageController(
-    initialPage: 0,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      Timer.periodic(Duration(seconds: 10), (Timer timer) {
-        return setState(() {
-          if (currentPage < 1) {
-            currentPage++;
-          } else {
-            currentPage = 0;
-          }
-          pageController.animateToPage(
-            currentPage,
-            duration: Duration(milliseconds: 500),
-            curve: Curves.easeIn,
-          );
-        });
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,9 +26,10 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => OnBoardingWidget(pageController: pageController),
+        '/': (context) => OnBoardingWidget(),
         'LoginScreen': (context) => LoginScreen(),
         'RegisterScreen': (context) => RegisterScreen(),
+        'HomePage' : (context) => HomePage(),
       },
     );
   }
