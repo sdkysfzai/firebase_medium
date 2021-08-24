@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_todoapp/models/userModel.dart';
+import 'package:firebase_todoapp/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -27,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _authService = AuthService();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -154,6 +158,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     )
                   ],
+                ),
+                TextButton(
+                  onPressed: () async {
+                    UserModel result = await _authService.singInAnnon();
+                    print('user Signed in');
+                    print("${result.uid}");
+                  },
+                  child: Text("Sign in Anonymously"),
                 ),
               ],
             )),
