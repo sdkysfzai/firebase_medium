@@ -12,6 +12,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    // ignore: avoid_print
     print("Home page called");
   }
 
@@ -24,12 +25,13 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Home Page"),
+            const Text("Home Page"),
             ElevatedButton(
               onPressed: () async {
                 await _auth.signOut();
+                Navigator.of(context).pushReplacementNamed("OnBoardingWidget");
               },
-              child: Text("Sign out"),
+              child: const Text("Sign out"),
             )
           ],
         ),
@@ -37,3 +39,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+

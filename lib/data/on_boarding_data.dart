@@ -24,7 +24,7 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _timer = Timer.periodic(Duration(seconds: 10), (Timer timer) {
+      _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
         return setState(() {
           if (currentPage < 1) {
             currentPage++;
@@ -33,7 +33,7 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
           }
           pageController.animateToPage(
             currentPage,
-            duration: Duration(milliseconds: 500),
+            duration:const Duration(milliseconds: 500),
             curve: Curves.easeIn,
           );
         });
@@ -44,6 +44,7 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
   @override
   void dispose() {
     _timer?.cancel();
+    // ignore: avoid_print
     print("OnBoarding Dispose timer called");
     pageController.dispose();
     super.dispose();
@@ -56,7 +57,7 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
         PageView(
           allowImplicitScrolling: true,
           controller: pageController,
-          children: [
+          children:const [
             FirstPage(),
             SecondPage(),
           ],
@@ -73,23 +74,23 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
                   height: 50,
                   decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.all(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(18),
                       ),
                       boxShadow: [
                         BoxShadow(
                             color: Colors.grey.shade500,
-                            offset: Offset(4.0, 4.0),
+                            offset: const Offset(4.0, 4.0),
                             blurRadius: 15.0,
                             spreadRadius: 1.0),
-                        BoxShadow(
+                        const BoxShadow(
                             color: Colors.white,
                             offset: Offset(-4.0, -4.0),
                             blurRadius: 15.0,
                             spreadRadius: 1.0)
                       ]),
                   child: ElevatedButton(
-                    child: Text(
+                    child: const Text(
                       "Sign up",
                       style: TextStyle(color: Colors.white, fontSize: 21),
                     ),
@@ -104,13 +105,13 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Already have an account?',
                       style: TextStyle(
                           fontSize: 15,
@@ -121,7 +122,7 @@ class _OnBoardingWidgetState extends State<OnBoardingWidget> {
                         onPressed: () {
                           Navigator.pushNamed(context, 'LoginScreen');
                         },
-                        child: Text("Sign in")),
+                        child: const Text("Sign in")),
                   ],
                 ),
               ],

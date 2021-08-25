@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_todoapp/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -14,23 +15,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passController = TextEditingController();
   final _usernameController = TextEditingController();
   String _message = "";
-  Color _greenColor = Color(0xff00D959);
+  final Color _greenColor = const Color(0xff00D959);
   final _formKey = GlobalKey<FormState>();
   bool _isLogginIn = false;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passController.dispose();
     _usernameController.dispose();
+    // ignore: avoid_print
     print("Register disposer called");
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _authService = AuthService();
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -40,15 +42,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Stack(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(20, 130, 150, 0),
-                      child: Text(
+                      padding: const EdgeInsets.fromLTRB(20, 130, 150, 0),
+                      child: const Text(
                         "Register \n Account",
                         style: TextStyle(
                             fontSize: 55, fontWeight: FontWeight.w800),
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(240, 171, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(240, 171, 0, 0),
                       child: Text(
                         ".",
                         style: TextStyle(
@@ -59,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 64,
                 ),
                 RegisterFormField(
@@ -76,20 +78,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _passController,
                   validator: validatePass,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Center(
                   child: Text(
                     _message,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Container(
+                SizedBox(
                   height: 50,
                   width: 280,
                   child: _isLogginIn
@@ -98,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: _greenColor,
                         )
                       : ElevatedButton(
-                          child: Text(
+                          child: const Text(
                             "Register",
                             style: TextStyle(color: Colors.white, fontSize: 21),
                           ),
@@ -116,13 +118,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (_formKey.currentState!.validate()) {
                               try {
                                 final UserCredential user =
-                                    await _auth.createUserWithEmailAndPassword(
-                                  email: _emailController.text.trim(),
-                                  password: _passController.text.trim(),
-                                );
+                                    await _authService.signUp(
+                                        emailCont: _emailController.text.trim(),
+                                        passCont: _passController.text.trim());
+
                                 await _firestore
                                     .collection("users")
-                                    .doc("${user.user?.uid}")
+                                    .doc(user.user?.uid)
                                     .set({
                                   "username": _usernameController.text.trim(),
                                   "email": _emailController.text.trim()
@@ -157,19 +159,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      child: Text("Already have an Account?"),
-                    ),
-                    Container(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacementNamed('LoginScreen');
-                        },
-                        child: Text(
-                          "Sign In",
-                          style: TextStyle(color: _greenColor),
-                        ),
+                    const Text("Already have an Account?"),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed('LoginScreen');
+                      },
+                      child: Text(
+                        "Sign In",
+                        style: TextStyle(color: _greenColor),
                       ),
                     )
                   ],
@@ -182,7 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 }
 
 class RegisterFormField extends StatelessWidget {
-  const RegisterFormField({
+   const RegisterFormField({
     this.validator,
     Key? key,
     required this.labelText,
@@ -192,20 +190,20 @@ class RegisterFormField extends StatelessWidget {
 
   final TextEditingController? _controller;
   final String labelText;
-  final validator;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 22),
+      padding: const EdgeInsets.symmetric(horizontal: 22),
       child: TextFormField(
         validator: validator,
         controller: _controller,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.green, width: 1.5)),
-            labelText: '$labelText',
+            labelText: labelText,
             labelStyle: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.grey[600])),
       ),
@@ -231,11 +229,12 @@ String? validatePass(String? formPass) {
   String pattern =
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[_!@#\$&*~]).{8,}$';
   RegExp regEx = RegExp(pattern);
-  if (!regEx.hasMatch(formPass))
+  if (!regEx.hasMatch(formPass)) {
     return '''
     Password must be atleast 8 characters,
     include an uppercase letter, number and symbol.
         ''';
+  }
 
   return null;
 }

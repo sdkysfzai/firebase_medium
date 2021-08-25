@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_todoapp/models/userModel.dart';
+import 'package:firebase_todoapp/models/user_model.dart';
 import 'package:firebase_todoapp/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,15 +14,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   String _message = "";
-  Color _greenColor = Color(0xff00D959);
+  final Color _greenColor = const Color(0xff00D959);
   final _formKey = GlobalKey<FormState>();
   bool _isLoggingIn = false;
-  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passController.dispose();
+    // ignore: avoid_print
     print("Login disposer called");
     super.dispose();
   }
@@ -40,15 +40,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Stack(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(0, 130, 150, 0),
-                      child: Text(
+                      padding: const EdgeInsets.fromLTRB(0, 130, 150, 0),
+                      child: const Text(
                         "Hello \n There",
                         style: TextStyle(
                             fontSize: 55, fontWeight: FontWeight.w800),
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(155, 171, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(155, 171, 0, 0),
                       child: Text(
                         ".",
                         style: TextStyle(
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 64,
                 ),
                 LoginFormField(
@@ -71,29 +71,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   labelText: "Password",
                   controller: _passController,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Center(
                   child: Text(
                     _message,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  height: 50,
-                  width: 280,
+                SizedBox(
                   child: _isLoggingIn
                       ? CircularProgressIndicator(
                           strokeWidth: 2,
                           color: _greenColor,
                         )
                       : ElevatedButton(
-                          child: Text(
+                          child: const Text(
                             "Login",
                             style: TextStyle(color: Colors.white, fontSize: 21),
                           ),
@@ -110,9 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                             if (_formKey.currentState!.validate()) {
                               try {
-                                await _auth.signInWithEmailAndPassword(
-                                    email: _emailController.text.trim(),
-                                    password: _passController.text.trim());
+                                await _authService.signIn(
+                                    emailCont: _emailController.text.trim(),
+                                    passCont: _passController.text.trim());
 
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     'HomePage', (route) => false);
@@ -142,19 +140,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      child: Text("Don't have an Account?"),
-                    ),
-                    Container(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacementNamed('RegisterScreen');
-                        },
-                        child: Text(
-                          "Sign up",
-                          style: TextStyle(color: _greenColor),
-                        ),
+                    const Text("Don't have an Account?"),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed('RegisterScreen');
+                      },
+                      child: Text(
+                        "Sign up",
+                        style: TextStyle(color: _greenColor),
                       ),
                     )
                   ],
@@ -162,10 +156,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   onPressed: () async {
                     UserModel result = await _authService.singInAnnon();
+                    // ignore: avoid_print
                     print('user Signed in');
-                    print("${result.uid}");
+                    // ignore: avoid_print
+                    print(result.uid);
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('HomePage', (route) => false);
                   },
-                  child: Text("Sign in Anonymously"),
+                  child: const Text("Sign in Anonymously"),
                 ),
               ],
             )),
@@ -185,20 +183,20 @@ class LoginFormField extends StatelessWidget {
 
   final TextEditingController? _controller;
   final String labelText;
-  final validator;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 22),
+      padding: const EdgeInsets.symmetric(horizontal: 22),
       child: TextFormField(
         validator: validator,
         controller: _controller,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.green, width: 1.5)),
-            labelText: '$labelText',
+            labelText: labelText,
             labelStyle: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.grey[600])),
       ),

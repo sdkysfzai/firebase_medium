@@ -13,7 +13,7 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fill,
           image: AssetImage('assets/images/handimage.jpg'),
@@ -27,20 +27,20 @@ class _FirstPageState extends State<FirstPage> {
             Padding(
               padding: const EdgeInsets.only(top: 240, left: 30),
               child: Row(
-                children: [
-                  Text(
+                children: const [
+                    Text(
                     "reader",
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w700),
                   ),
-                  Text(
+                    Text(
                     "mind",
                     style: TextStyle(fontSize: 35, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
+            const Padding(
+              padding: EdgeInsets.only(left: 30),
               child: Text(
                 "Explore digital stories.",
                 style: TextStyle(fontSize: 50, fontWeight: FontWeight.w700),

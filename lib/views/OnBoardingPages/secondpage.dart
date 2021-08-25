@@ -14,24 +14,24 @@ class _SecondPageState extends State<SecondPage> {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            Expanded(
+            const Expanded(
               flex: 1,
-              child: Image(
+              child:  Image(
                 image: AssetImage("assets/images/secondimage.jpg"),
               ),
             ),
             Expanded(
                 flex: 1,
                 child: Stack(
-                  children: [
+                  children:  [
                     Container(
                       color: Colors.white,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 10),
+                      padding:  const EdgeInsets.only(left: 30, right: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: const [
                           Text(
                             "Get Started",
                             style: TextStyle(fontSize: 20, color: Colors.grey),
