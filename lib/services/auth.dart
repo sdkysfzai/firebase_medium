@@ -28,17 +28,24 @@ class AuthService {
   }
 
 //sign in with Email and Password
-  Future<void> signIn(
+  Future<UserModel?> signIn(
       {required String emailCont, required String passCont}) async {
-    await _auth.signInWithEmailAndPassword(
+    UserCredential result = await _auth.signInWithEmailAndPassword(
         email: emailCont, password: passCont);
+    User? user = result.user;
+    return _userFromFirebase(user);
   }
 
 //register with email and password
-  Future<UserCredential> signUp(
-      {required String emailCont, required String passCont}) async {
-    return await _auth.createUserWithEmailAndPassword(
+  Future<UserModel?> signUp({
+    required String emailCont,
+    required String passCont,
+  }) async {
+    UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: emailCont, password: passCont);
+    User? user = result.user;
+
+    return _userFromFirebase(user);
   }
 
 //signOut

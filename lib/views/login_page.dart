@@ -183,7 +183,7 @@ class LoginFormField extends StatelessWidget {
 
   final TextEditingController? _controller;
   final String labelText;
-  final String? Function(String?)? validator;
+  final FormFieldValidator<String>? validator;
 
   @override
   Widget build(BuildContext context) {

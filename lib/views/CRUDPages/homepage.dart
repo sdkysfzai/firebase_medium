@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_todoapp/services/auth.dart';
+import 'package:firebase_todoapp/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,13 +22,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
-    return Scaffold(
-      body: Align(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Home Page"),
+    return StreamProvider<QuerySnapshot?>.value(
+      value: DatabaseService().userData,
+      initialData: null,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          actions: [
             ElevatedButton(
               onPressed: () async {
                 await _auth.signOut();
@@ -35,8 +38,24 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
+        body: const PostList(),
       ),
     );
   }
 }
 
+class PostList extends StatefulWidget {
+  const PostList({Key? key}) : super(key: key);
+
+  @override
+  _PostListState createState() => _PostListState();
+}
+
+class _PostListState extends State<PostList> {
+  @override
+  Widget build(BuildContext context) {
+    final users = context.watch<QuerySnapshot>();
+    print(users.docs);
+    return Container();
+  }
+}

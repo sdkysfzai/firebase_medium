@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_todoapp/models/user_model.dart';
 import 'package:firebase_todoapp/services/auth.dart';
+import 'package:firebase_todoapp/services/database.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -18,7 +19,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final Color _greenColor = const Color(0xff00D959);
   final _formKey = GlobalKey<FormState>();
   bool _isLogginIn = false;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void dispose() {
@@ -117,18 +117,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             });
                             if (_formKey.currentState!.validate()) {
                               try {
-                                final UserCredential user =
+                                final UserModel? user =
                                     await _authService.signUp(
                                         emailCont: _emailController.text.trim(),
                                         passCont: _passController.text.trim());
 
-                                await _firestore
-                                    .collection("users")
-                                    .doc(user.user?.uid)
-                                    .set({
-                                  "username": _usernameController.text.trim(),
-                                  "email": _emailController.text.trim()
-                                });
+                                await DatabaseService(uid: user?.uid)
+                                    .updateUserData(
+                                        _usernameController.text.trim(),
+                                        _emailController.text.trim());
+
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     'HomePage', (route) => false);
                               } on FirebaseAuthException catch (e) {
@@ -180,7 +178,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 }
 
 class RegisterFormField extends StatelessWidget {
-   const RegisterFormField({
+  const RegisterFormField({
     this.validator,
     Key? key,
     required this.labelText,
@@ -190,7 +188,7 @@ class RegisterFormField extends StatelessWidget {
 
   final TextEditingController? _controller;
   final String labelText;
-  final String? Function(String?)? validator;
+  final FormFieldValidator<String>? validator;
 
   @override
   Widget build(BuildContext context) {
