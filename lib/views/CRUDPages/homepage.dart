@@ -54,9 +54,9 @@ class PostList extends StatefulWidget {
 class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
-    final users = context.watch<QuerySnapshot>();
+    final users = context.read<QuerySnapshot?>();
     // ignore: avoid_print
-    print('The users data: ${users.docs}');
+    print('The users data: ${users?.docs}');
     return Container();
   }
 }
