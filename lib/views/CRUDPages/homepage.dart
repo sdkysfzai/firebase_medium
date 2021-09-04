@@ -55,7 +55,8 @@ class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
     final users = context.watch<QuerySnapshot>();
-    print(users.docs);
+    // ignore: avoid_print
+    print('The users data: ${users.docs}');
     return Container();
   }
 }
