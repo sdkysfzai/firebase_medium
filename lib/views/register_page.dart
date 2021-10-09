@@ -66,15 +66,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 RegisterFormField(
                   labelText: "Username",
+                  obscureText: false,
                   controller: _usernameController,
                 ),
                 RegisterFormField(
                   labelText: "Email",
+                  obscureText: false,
                   controller: _emailController,
                   validator: validateEmail,
                 ),
                 RegisterFormField(
                   labelText: "Password",
+                  obscureText: true,
                   controller: _passController,
                   validator: validatePass,
                 ),
@@ -181,6 +184,7 @@ class RegisterFormField extends StatelessWidget {
   const RegisterFormField({
     this.validator,
     Key? key,
+    required this.obscureText,
     required this.labelText,
     TextEditingController? controller,
   })  : _controller = controller,
@@ -189,6 +193,7 @@ class RegisterFormField extends StatelessWidget {
   final TextEditingController? _controller;
   final String labelText;
   final FormFieldValidator<String>? validator;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +201,7 @@ class RegisterFormField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 22),
       child: TextFormField(
         validator: validator,
+        obscureText: obscureText,
         controller: _controller,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(

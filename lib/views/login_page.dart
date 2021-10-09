@@ -65,10 +65,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 LoginFormField(
                   labelText: "Email",
                   controller: _emailController,
+                  obscureText: false,
                   validator: validateEmail,
                 ),
                 LoginFormField(
                   labelText: "Password",
+                  obscureText: true,
                   controller: _passController,
                 ),
                 const SizedBox(
@@ -177,6 +179,7 @@ class LoginFormField extends StatelessWidget {
     this.validator,
     Key? key,
     required this.labelText,
+    required this.obscureText,
     TextEditingController? controller,
   })  : _controller = controller,
         super(key: key);
@@ -184,6 +187,7 @@ class LoginFormField extends StatelessWidget {
   final TextEditingController? _controller;
   final String labelText;
   final FormFieldValidator<String>? validator;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -191,6 +195,7 @@ class LoginFormField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 22),
       child: TextFormField(
         validator: validator,
+        obscureText: obscureText,
         controller: _controller,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(

@@ -56,7 +56,17 @@ class _PostListState extends State<PostList> {
   Widget build(BuildContext context) {
     final users = context.read<QuerySnapshot?>();
     // ignore: avoid_print
-    print('The users data: ${users?.docs}');
-    return Container();
+    print("The users data: ${users?.docs}");
+    for (var doc in users!.docs) {
+      // ignore: avoid_print
+      print(doc.data());
+    }
+    return Center(
+      child: Column(
+        children: [
+          Text('Updated users data: ${users.docs}'),
+        ],
+      ),
+    );
   }
 }
