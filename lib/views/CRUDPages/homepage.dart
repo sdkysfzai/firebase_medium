@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_todoapp/models/user_model.dart';
 import 'package:firebase_todoapp/services/auth.dart';
 import 'package:firebase_todoapp/services/database.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +22,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
-    return StreamProvider<QuerySnapshot?>.value(
+    return StreamProvider<List<UserModel>>.value(
       value: DatabaseService().userData,
-      initialData: null,
+      initialData: const [],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -54,19 +54,29 @@ class PostList extends StatefulWidget {
 class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
-    final users = context.read<QuerySnapshot?>();
-    // ignore: avoid_print
-    print("The users data: ${users?.docs}");
-    for (var doc in users!.docs) {
+    final users = context.read<List<UserModel>?>() ?? [];
+    // ignore: avoid_function_literals_in_foreach_calls
+    users.forEach((doc) {
       // ignore: avoid_print
-      print(doc.data());
-    }
-    return Center(
-      child: Column(
-        children: [
-          Text('Updated users data: ${users.docs}'),
-        ],
-      ),
-    );
+      print(doc.email);
+      // ignore: avoid_print
+      print(doc.username);
+    });
+
+    return ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          final UserModel user = users[index];
+          // ignore: avoid_print
+          return Card(
+            child: Center(
+              child: ListTile(
+                leading: const CircleAvatar(backgroundColor: Colors.brown),
+                title: Text(user.username),
+                subtitle: Text(user.email),
+              ),
+            ),
+          );
+        });
   }
 }

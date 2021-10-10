@@ -10,10 +10,7 @@ class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future updateUserData(String username, String email) async {
-    return await _firestore
-    .collection("users")
-    .doc(uid)
-    .set({
+    return await _firestore.collection("users").doc(uid).set({
       "username": username,
       "email": email,
     });
@@ -21,12 +18,20 @@ class DatabaseService {
 
   //userData from snapshot
 
-  Stream<QuerySnapshot> get userData {
+  Stream<List<UserModel>> get userData {
     return _firestore
-    .collection("users")
-    .snapshots();
+        .collection("users")
+        .snapshots()
+        .map(_userDataFromSnapshot);
   }
 
   //user list from snapshot
-  
+  List<UserModel> _userDataFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return UserModel(
+        username: doc.get('username') ?? '',
+        email: doc.get('email') ?? '',
+      );
+    }).toList();
+  }
 }
