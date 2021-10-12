@@ -33,10 +33,11 @@ class _HomePageState extends State<HomePage> {
             child: IconButton(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-                iconSize: 50,
+                iconSize: 47,
                 onPressed: () {
                   // ignore: avoid_print
-                  print("Clicked");
+                  print("Drawer Clicked");
+                  Navigator.of(context).pushNamed('DrawerScreen');
                 },
                 icon: const Icon(
                   Icons.drag_handle_outlined,
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 0),
               child: GestureDetector(
                 onTap: () {
                   // ignore: avoid_print

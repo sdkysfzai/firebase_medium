@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_todoapp/data/on_boarding_data.dart';
 import 'package:firebase_todoapp/services/auth.dart';
 import 'package:firebase_todoapp/views/CRUDPages/homepage.dart';
+import 'package:firebase_todoapp/views/appbar_pages/drawer.dart';
 import 'package:firebase_todoapp/views/login_page.dart';
 import 'package:firebase_todoapp/views/register_page.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class _MyAppState extends State<MyApp> {
         'OnBoardingWidget': (context) => const OnBoardingWidget(),
         'LoginScreen': (context) => const LoginScreen(),
         'RegisterScreen': (context) => const RegisterScreen(),
+        'DrawerScreen': (context) => const DrawerScreen(),
       },
     );
   }
