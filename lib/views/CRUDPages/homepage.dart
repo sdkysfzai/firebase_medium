@@ -22,9 +22,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
-    return StreamProvider<List<UserModel>>.value(
-      value: DatabaseService().userData,
+    return StreamProvider<List<UserModel>>(
       initialData: const [],
+      create: (context) => DatabaseService().userData,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -54,29 +54,22 @@ class PostList extends StatefulWidget {
 class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
-    final users = context.read<List<UserModel>?>() ?? [];
-    // ignore: avoid_function_literals_in_foreach_calls
-    users.forEach((doc) {
-      // ignore: avoid_print
-      print(doc.email);
-      // ignore: avoid_print
-      print(doc.username);
-    });
+    final users = context.watch<List<UserModel>>();
 
     return ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          final UserModel user = users[index];
-          // ignore: avoid_print
-          return Card(
-            child: Center(
-              child: ListTile(
-                leading: const CircleAvatar(backgroundColor: Colors.brown),
-                title: Text(user.username),
-                subtitle: Text(user.email),
-              ),
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        final UserModel user = users[index]
+        return Card(
+          child: Center(
+            child: ListTile(
+              leading: const CircleAvatar(backgroundColor: Colors.brown),
+              title: Text(user.username),
+              subtitle: Text(user.email),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
