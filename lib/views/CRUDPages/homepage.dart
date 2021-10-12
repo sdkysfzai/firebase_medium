@@ -1,8 +1,4 @@
-import 'package:firebase_todoapp/models/user_model.dart';
-import 'package:firebase_todoapp/services/auth.dart';
-import 'package:firebase_todoapp/services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,55 +17,110 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
-    return StreamProvider<List<UserModel>>(
-      initialData: const [],
-      create: (context) => DatabaseService().userData,
-      child: Scaffold(
-        appBar: AppBar(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: AppBar(
           backgroundColor: Colors.white,
-          actions: [
-            ElevatedButton(
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.of(context).pushReplacementNamed("OnBoardingWidget");
-              },
-              child: const Text("Sign out"),
-            )
+          automaticallyImplyLeading: false,
+          elevation: 0.1,
+          leading: Theme(
+            data: ThemeData(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
+            child: IconButton(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+                iconSize: 50,
+                onPressed: () {
+                  // ignore: avoid_print
+                  print("Clicked");
+                },
+                icon: const Icon(
+                  Icons.drag_handle_outlined,
+                  color: Colors.black,
+                )),
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+              child: GestureDetector(
+                onTap: () {
+                  // ignore: avoid_print
+                  print("Clicked");
+                },
+                child: const CircleAvatar(),
+              ),
+            ),
           ],
         ),
-        body: const PostList(),
       ),
+      body: const HomeBody(),
     );
   }
 }
 
-class PostList extends StatefulWidget {
-  const PostList({Key? key}) : super(key: key);
+class HomeBody extends StatefulWidget {
+  const HomeBody({Key? key}) : super(key: key);
 
   @override
-  _PostListState createState() => _PostListState();
+  _HomeBodyState createState() => _HomeBodyState();
 }
 
-class _PostListState extends State<PostList> {
+class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
-    final users = context.watch<List<UserModel>>();
-
-    return ListView.builder(
-      itemCount: users.length,
-      itemBuilder: (context, index) {
-        final UserModel user = users[index]
-        return Card(
-          child: Center(
-            child: ListTile(
-              leading: const CircleAvatar(backgroundColor: Colors.brown),
-              title: Text(user.username),
-              subtitle: Text(user.email),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+          child: Text(
+            'Blogs',
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
-        );
-      },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey.shade100,
+                    filled: true,
+                    hintText: 'Search Blogs',
+                    prefixIcon: const Icon(
+                      Icons.search,
+                    ),
+                    hintStyle: const TextStyle(
+                      color: Colors.grey,
+                    ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12),
+                      ),
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12),
+                      ),
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
