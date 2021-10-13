@@ -87,6 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 20,
                 ),
                 SizedBox(
+                  height: 50,
+                  width: 280,
                   child: _isLoggingIn
                       ? CircularProgressIndicator(
                           strokeWidth: 2,
@@ -165,7 +167,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil('HomePage', (route) => false);
                   },
-                  child: const Text("Sign in Anonymously"),
+                  child: Text(
+                    "Sign in Anonymously",
+                    style: TextStyle(color: _greenColor),
+                  ),
                 ),
               ],
             )),

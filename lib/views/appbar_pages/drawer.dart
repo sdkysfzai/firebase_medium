@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -46,102 +47,109 @@ class DrawerItems extends StatefulWidget {
 }
 
 class _DrawerItemsState extends State<DrawerItems> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            child: const Text(
-              'Home',
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 20,
             ),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            child: const Text(
-              'Articles',
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+            GestureDetector(
+              child: const Text(
+                'Home',
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+              ),
+              onTap: () {},
             ),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            child: const Text(
-              'Browse',
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+            const SizedBox(
+              height: 20,
             ),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            child: const Text(
-              'Interests',
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+            GestureDetector(
+              child: const Text(
+                'Articles',
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+              ),
+              onTap: () {},
             ),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            child: const Text(
-              'Help',
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+            const SizedBox(
+              height: 20,
             ),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          const Divider(
-            thickness: 0.8,
-            color: Colors.black,
-            height: 20,
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          GestureDetector(
-            child: const Text(
-              'My Account',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+            GestureDetector(
+              child: const Text(
+                'Browse',
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+              ),
+              onTap: () {},
             ),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            child: const Text(
-              'Settings',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+            const SizedBox(
+              height: 20,
             ),
-            onTap: () {},
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            child: const Text(
-              'Sign Out',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+            GestureDetector(
+              child: const Text(
+                'Interests',
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+              ),
+              onTap: () {},
             ),
-            onTap: () {},
-          ),
-        ],
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              child: const Text(
+                'Help',
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
+              ),
+              onTap: () {},
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            const Divider(
+              thickness: 0.8,
+              color: Colors.black,
+              height: 20,
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            GestureDetector(
+              child: const Text(
+                'My Account',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+              ),
+              onTap: () {},
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              child: const Text(
+                'Settings',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+              ),
+              onTap: () {},
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              child: const Text(
+                'Sign Out',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+              ),
+              onTap: () async {
+                await _auth.signOut();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    "OnBoardingWidget", (route) => false);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,8 +5,6 @@ class DatabaseService {
   String? uid;
   DatabaseService({this.uid});
 
-  // final CollectionReference userCollection =
-  //     FirebaseFirestore.instance.collection("users");
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future updateUserData(String username, String email) async {

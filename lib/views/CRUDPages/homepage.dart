@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 0),
+              padding: const EdgeInsets.fromLTRB(0, 15, 23, 0),
               child: GestureDetector(
                 onTap: () {
                   // ignore: avoid_print
@@ -59,6 +59,34 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: const HomeBody(),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(100),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.green.withOpacity(0.3),
+              spreadRadius: 3,
+              blurRadius: 9,
+              offset: const Offset(3, 5),
+            ),
+          ],
+        ),
+        child: FloatingActionButton(
+          elevation: 0,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onPressed: () {
+            Navigator.of(context).pushNamed('CreatePostScreen');
+          },
+          child: const Icon(Icons.add),
+          backgroundColor: const Color(0xff00D959),
+          foregroundColor: Colors.white,
+        ),
+      ),
     );
   }
 }
