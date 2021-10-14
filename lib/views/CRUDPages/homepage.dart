@@ -35,8 +35,6 @@ class _HomePageState extends State<HomePage> {
                     const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
                 iconSize: 47,
                 onPressed: () {
-                  // ignore: avoid_print
-                  print("Drawer Clicked");
                   Navigator.of(context).pushNamed('DrawerScreen');
                 },
                 icon: const Icon(
@@ -49,8 +47,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.fromLTRB(0, 15, 23, 0),
               child: GestureDetector(
                 onTap: () {
-                  // ignore: avoid_print
-                  print("Clicked");
+                  Navigator.of(context).pushNamed('MyAccSettingScreen');
                 },
                 child: const CircleAvatar(),
               ),

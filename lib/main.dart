@@ -6,6 +6,7 @@ import 'package:firebase_todoapp/views/CRUDPages/homepage.dart';
 import 'package:firebase_todoapp/views/appbar_pages/drawer.dart';
 import 'package:firebase_todoapp/views/login_page.dart';
 import 'package:firebase_todoapp/views/register_page.dart';
+import 'package:firebase_todoapp/views/settings.dart/myacc_settings.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -36,6 +37,7 @@ class _MyAppState extends State<MyApp> {
         'RegisterScreen': (context) => const RegisterScreen(),
         'DrawerScreen': (context) => const DrawerScreen(),
         'CreatePostScreen': (context) => const CreatePost(),
+        'MyAccSettingScreen': (context) => const AccountSettings(),
       },
     );
   }

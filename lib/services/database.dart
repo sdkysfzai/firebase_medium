@@ -7,6 +7,8 @@ class DatabaseService {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  
+  
   Future updateUserData(String username, String email) async {
     return await _firestore.collection("users").doc(uid).set({
       "username": username,
