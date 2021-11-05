@@ -1,4 +1,8 @@
+import 'package:firebase_todoapp/models/post_model.dart';
+import 'package:firebase_todoapp/services/database.dart';
+import 'package:firebase_todoapp/views/CRUDPages/delete_post.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -98,6 +102,25 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
+    return StreamProvider<List<Posts>>(
+      initialData: const [],
+      create: (context) => DatabaseService().userPosts,
+      child: const PostList(),
+    );
+  }
+}
+
+class PostList extends StatefulWidget {
+  const PostList({Key? key}) : super(key: key);
+
+  @override
+  _PostListState createState() => _PostListState();
+}
+
+class _PostListState extends State<PostList> {
+  @override
+  Widget build(BuildContext context) {
+    final posts = context.watch<List<Posts>?>() ?? [];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -146,6 +169,60 @@ class _HomeBodyState extends State<HomeBody> {
             ],
           ),
         ),
+        Expanded(
+          child: SizedBox(
+            height: 200,
+            child: ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final Posts post = posts[index];
+
+                return Card(
+                  elevation: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.network(
+                          post.photo,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.network(
+                                'https://via.placeholder.com/350x150');
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          post.title,
+                          style: const TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          post.description,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => const DeletePost(),
+                          child: const Text('Delete Post'),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        )
       ],
     );
   }

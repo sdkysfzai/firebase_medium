@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_todoapp/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-
-final titleController = TextEditingController();
-final descriptionController = TextEditingController();
+import 'package:path/path.dart' as path;
 
 class CreatePost extends StatefulWidget {
   const CreatePost({Key? key}) : super(key: key);
@@ -15,17 +14,25 @@ class CreatePost extends StatefulWidget {
   _CreatePostState createState() => _CreatePostState();
 }
 
+final titleController = TextEditingController();
+final descriptionController = TextEditingController();
+
 class _CreatePostState extends State<CreatePost> {
-  firebase_storage.Reference ref =
-      firebase_storage.FirebaseStorage.instance.ref('/image.jpeg');
   final db = FirebaseFirestore.instance;
   final ImagePicker _picker = ImagePicker();
   String? imagePath;
 
+  // @override
+  // void dispose() {
+  //   titleController.dispose();
+  //   descriptionController.dispose();
+  //   super.dispose();
+  // }
+
   @override
   void dispose() {
-    titleController.dispose();
-    descriptionController.dispose();
+    titleController.clear();
+    descriptionController.clear();
     super.dispose();
   }
 
@@ -64,14 +71,17 @@ class _CreatePostState extends State<CreatePost> {
           TextButton(
             onPressed: () async {
               if (imagePath != null) {
+                String imageName = path.basename(imagePath!);
+                firebase_storage.Reference ref = firebase_storage
+                    .FirebaseStorage.instance
+                    .ref('/$imageName');
+               
                 File file = File(imagePath!);
                 await ref.putFile(file);
                 String downloadURL = await ref.getDownloadURL();
-                await db.collection("posts").add({
-                  "title": titleController.text.trim(),
-                  "description": descriptionController.text.trim(),
-                  "imageurl": downloadURL,
-                });
+
+                await DatabaseService().updatePosts(titleController.text.trim(),
+                    descriptionController.text.trim(), downloadURL);
                 // ignore: avoid_print
                 print('File uploaded successfuly');
                 titleController.clear();
