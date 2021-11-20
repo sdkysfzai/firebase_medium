@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_todoapp/models/post_model.dart';
 import 'package:firebase_todoapp/services/database.dart';
 import 'package:firebase_todoapp/views/CRUDPages/delete_post.dart';
@@ -120,6 +122,8 @@ class PostList extends StatefulWidget {
 class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    FirebaseStorage storage = FirebaseStorage.instance;
     final posts = context.watch<List<Posts>?>() ?? [];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +180,6 @@ class _PostListState extends State<PostList> {
               itemCount: posts.length,
               itemBuilder: (context, index) {
                 final Posts post = posts[index];
-
                 return Card(
                   elevation: 1,
                   child: Padding(
@@ -211,9 +214,10 @@ class _PostListState extends State<PostList> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
+                        DeletePost(db: db, post: post, storage: storage),
                         ElevatedButton(
-                          onPressed: () => const DeletePost(),
-                          child: const Text('Delete Post'),
+                          onPressed: () {},
+                          child: const Text('Update Post'),
                         )
                       ],
                     ),

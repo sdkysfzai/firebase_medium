@@ -37,6 +37,8 @@ class _MyAppState extends State<MyApp> {
         'RegisterScreen': (context) => const RegisterScreen(),
         'DrawerScreen': (context) => const DrawerScreen(),
         'CreatePostScreen': (context) => const CreatePost(),
+        //'DeletePostScreen': (context) => const DeletePosts(),
+        //'UpdatePostScreen': (context) => const UpdatePost(),
         'MyAccSettingScreen': (context) => const AccountSettings(),
       },
     );

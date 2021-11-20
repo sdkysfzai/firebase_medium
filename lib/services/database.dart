@@ -12,6 +12,7 @@ class DatabaseService {
   Stream<List<Posts>> get userPosts {
     return _firestore
         .collection("posts")
+        //.orderBy("createdAt", descending: true)
         .snapshots()
         .map(_userPostsFromSnapshot);
   }
@@ -23,6 +24,7 @@ class DatabaseService {
         title: doc.get('title') ?? '',
         description: doc.get('description') ?? '',
         photo: doc.get('imageurl') ?? '',
+        id: doc.id,
       );
     }).toList();
   }
