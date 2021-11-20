@@ -4,7 +4,8 @@ import 'package:firebase_todoapp/models/user_model.dart';
 
 class DatabaseService {
   String? uid;
-  DatabaseService({this.uid});
+  String? docid;
+  DatabaseService({this.uid, this.docid});
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -25,12 +26,23 @@ class DatabaseService {
         description: doc.get('description') ?? '',
         photo: doc.get('imageurl') ?? '',
         id: doc.id,
+        puid: doc.get('userID') ?? '',
       );
     }).toList();
   }
 
-  Future updatePosts(String title, String description, String photo) async {
+  Future createPosts(
+      String title, String description, String photo, String? puid) async {
     return await _firestore.collection("posts").add({
+      "title": title,
+      "description": description,
+      "imageurl": photo,
+      "userID": puid,
+    });
+  }
+
+  Future updatePosts(String title, String description, String photo) async {
+    return await _firestore.collection("posts").doc(docid).set({
       "title": title,
       "description": description,
       "imageurl": photo,

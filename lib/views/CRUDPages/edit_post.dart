@@ -1,35 +1,36 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_todoapp/models/post_model.dart';
 import 'package:firebase_todoapp/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
+import 'dart:io';
 
-class CreatePost extends StatefulWidget {
-  const CreatePost({Key? key}) : super(key: key);
+class EditPost extends StatefulWidget {
+  final Posts post;
+
+  const EditPost({Key? key, required this.post}) : super(key: key);
 
   @override
-  _CreatePostState createState() => _CreatePostState();
+  _EditPostState createState() => _EditPostState();
 }
 
 final titleController = TextEditingController();
 final descriptionController = TextEditingController();
 
-class _CreatePostState extends State<CreatePost> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
+class _EditPostState extends State<EditPost> {
   final db = FirebaseFirestore.instance;
   final ImagePicker _picker = ImagePicker();
   String? imagePath;
 
-  // @override
-  // void dispose() {
-  //   titleController.dispose();
-  //   descriptionController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    titleController.text = widget.post.title;
+    descriptionController.text = widget.post.description;
+  }
 
   @override
   void dispose() {
@@ -40,8 +41,7 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = _auth.currentUser;
-    final String? uid = user?.uid;
+    FirebaseStorage storage = FirebaseStorage.instance;
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
@@ -50,7 +50,7 @@ class _CreatePostState extends State<CreatePost> {
         backgroundColor: Colors.white,
         elevation: 0.1,
         title: const Text(
-          'Create post',
+          'Edit post',
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
@@ -75,6 +75,7 @@ class _CreatePostState extends State<CreatePost> {
           TextButton(
             onPressed: () async {
               if (imagePath != null) {
+                await storage.refFromURL(widget.post.photo).delete();
                 String imageName = path.basename(imagePath!);
                 firebase_storage.Reference ref = firebase_storage
                     .FirebaseStorage.instance
@@ -83,9 +84,10 @@ class _CreatePostState extends State<CreatePost> {
                 File file = File(imagePath!);
                 await ref.putFile(file);
                 String downloadURL = await ref.getDownloadURL();
-
-                await DatabaseService().createPosts(titleController.text.trim(),
-                    descriptionController.text.trim(), downloadURL, uid);
+                await DatabaseService(docid: widget.post.id).updatePosts(
+                    titleController.text.trim(),
+                    descriptionController.text.trim(),
+                    downloadURL);
                 // ignore: avoid_print
                 print('File uploaded successfuly');
                 titleController.clear();
@@ -98,7 +100,7 @@ class _CreatePostState extends State<CreatePost> {
               imagePath = null;
             },
             child: const Text(
-              'Post',
+              'Edit',
               style: TextStyle(
                 fontSize: 20,
                 color: Color(0xff00D959),

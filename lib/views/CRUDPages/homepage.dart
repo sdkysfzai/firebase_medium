@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_todoapp/models/post_model.dart';
 import 'package:firebase_todoapp/services/database.dart';
 import 'package:firebase_todoapp/views/CRUDPages/delete_post.dart';
+import 'package:firebase_todoapp/views/CRUDPages/edit_post.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,34 +64,37 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: const HomeBody(),
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(100),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.green.withOpacity(0.3),
-              spreadRadius: 3,
-              blurRadius: 9,
-              offset: const Offset(3, 5),
-            ),
-          ],
-        ),
-        child: FloatingActionButton(
-          elevation: 0,
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onPressed: () {
-            Navigator.of(context).pushNamed('CreatePostScreen');
-          },
-          child: const Icon(Icons.add),
-          backgroundColor: const Color(0xff00D959),
-          foregroundColor: Colors.white,
-        ),
-      ),
+      floatingActionButton:
+          FirebaseAuth.instance.currentUser?.isAnonymous != false
+              ? null
+              : Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(100),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 9,
+                        offset: const Offset(3, 5),
+                      ),
+                    ],
+                  ),
+                  child: FloatingActionButton(
+                    elevation: 0,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('CreatePostScreen');
+                    },
+                    child: const Icon(Icons.add),
+                    backgroundColor: const Color(0xff00D959),
+                    foregroundColor: Colors.white,
+                  ),
+                ),
     );
   }
 }
@@ -216,7 +221,10 @@ class _PostListState extends State<PostList> {
                         ),
                         DeletePost(db: db, post: post, storage: storage),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => EditPost(post: post)));
+                          },
                           child: const Text('Update Post'),
                         )
                       ],

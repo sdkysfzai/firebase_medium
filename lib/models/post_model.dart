@@ -3,12 +3,13 @@ class Posts {
   String description;
   String photo;
   String id;
-  
+  String puid;
 
-  Posts(
-      {this.title = '',
-      this.description = '',
-      this.photo = '',
-      this.id = '',
-     });
+  Posts({
+    this.title = '',
+    this.description = '',
+    this.photo = '',
+    this.id = '',
+    this.puid = '',
+  });
 }
